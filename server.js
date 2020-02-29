@@ -59,8 +59,6 @@ io.on('connection', function(socket) {
 // // post endpoint (add new nouns / objects to tables?)
 
 const connection = require('./config/connection.js');
-const app = express();
-const PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.listen(PORT, function() {
