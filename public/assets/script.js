@@ -65,18 +65,19 @@ socket.on('logo-screen', function(){
     picture.setAttribute('class', 'logo')
     gameDiv.appendChild(picture)
 
-    const br = document.createElement('br') // line break
-    gameDiv.appendChild(br)
+    const br0 = document.createElement('br') // line break
+    gameDiv.appendChild(br0)
 
-    // const nameBox = document.createElement('input') // input box for player name 
-    // nameBox.setAttribute('id', playerName)
-    // gameDiv.appendChild(namebox)
+    const nameBox = document.createElement('input') // input box for player name 
+    nameBox.setAttribute('id', "playerName")
+    gameDiv.appendChild(nameBox)
 
-    // const br = document.createElement('br') // line break 
-    // gameDiv.appendChild(br)
+    const br1 = document.createElement('br') // line break 
+    gameDiv.appendChild(br1)
 
     const button = document.createElement('button') // button 
     button.setAttribute('onClick', "setUser()")
+    button.appendChild(document.createTextNode("START GAME!"))
     gameDiv.appendChild(button)
 
 })
@@ -93,7 +94,6 @@ socket.on('load-buttons', function(buttonData){
         gameDiv.appendChild(button)
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
-        nameBox.setAttribute('type', "text")
         newBtn.setAttribute('onClick', 'sendPress(this.id)')
         newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
         gameDiv.appendChild(newBtn)
