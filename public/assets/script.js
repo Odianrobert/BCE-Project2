@@ -90,8 +90,6 @@ socket.on('load-buttons', function(buttonData){
         gameDiv.appendChild(br)
         const button = document.createElement('button') // button 
         button.setAttribute('onClick', "setUser()")
-        button.appendChild(document.createTextNode("START GAME!"))
-        gameDiv.appendChild(button)
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
         newBtn.setAttribute('onClick', 'sendPress(this.id)')

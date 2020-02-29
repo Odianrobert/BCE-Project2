@@ -85,24 +85,28 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
-io.on('connection', function(socket){
-  socket.emit('logo-screen')
-})
+
 
 io.on('connection', function(socket){
   console.log('A user connected: ' + socket.id)
   //get the front end to fire a function that creates the buttons
-  socket.emit('load-buttons', fakeObjScav)
-  // socket.emit('logo-screen')
+  socket.emit('logo-screen');
+  socket.on("username", function(data){
+    console.log('Username: ' + data)
+  })
+
+  socket.on('game-start', function() {
+    socket.emit('load-buttons', fakeObjScav)
+  })
 
   socket.on('button-press', function(data){
     console.log('data recieved: ' + data)
     socket.emit('load-buttons', fakeObjDare)
   })
-  socket.on("username", function(data){
-    console.log('Username: ' + data)
-  })
 })
+
+
+
 
 // get api endpoint(s)
 
