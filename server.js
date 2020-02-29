@@ -1,75 +1,66 @@
-
-const path = require('path')
-const express = require('express')
-const app = express()
-const http = require('http').createServer(app) 
-const io = require('socket.io')(http)
-const PORT = process.env.PORT || 3000
+const path = require('path');
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const PORT = process.env.PORT || 3000;
 
 const fakeObjScav = [
-  {"sentence": "The stupud red hat example we (I) keep using"},
-  {"sentence": "A confused man"},
-  {"sentence": "A man hitting on an un-interested woman"},
-  {"sentence": "Someone spilled a drink"},
-  {"sentence": "Confused guy"},
-  {"sentence": "Someone on a date, but they're texing"}
-]
+  { sentence: 'The stupid red hat example we (I) keep using' },
+  { sentence: 'A confused man' },
+  { sentence: 'A man hitting on an un-interested woman' },
+  { sentence: 'Someone spilled a drink' },
+  { sentence: 'Confused guy' },
+  { sentence: "Someone on a date, but they're texting" }
+];
 
 const fakeObjDare = [
-  {"sentence": "Try and sell your shoes to the bartender"},
-  {"sentence": "Ask an angry man about your thumbs"},
-  {"sentence": "Offer your shoes to the bartender"},
-  {"sentence": "Get someone to buy you a drink"},
-  {"sentence": "Ask a woman about your eyebrows"},
-  {"sentence": "Try and sell your eyebrows to an angry man"}
-]
+  { sentence: 'Try and sell your shoes to the bartender' },
+  { sentence: 'Ask an angry man about your thumbs' },
+  { sentence: 'Offer your shoes to the bartender' },
+  { sentence: 'Get someone to buy you a drink' },
+  { sentence: 'Ask a woman about your eyebrows' },
+  { sentence: 'Try and sell your eyebrows to an angry man' }
+];
 
-app.use(express.static('public'))
-
+app.use(express.static('public'));
 
 // app.get('/', function (req, res) {
 //   res.sendFile(path.join(__dirname, './public/index.html'))
 // })
 
-
-
-
-io.on('connection', function(socket){
-  console.log('A user connected: ' + socket.id)
+io.on('connection', function(socket) {
+  console.log('A user connected: ' + socket.id);
   //get the front end to fire a function that creates the buttons
   socket.emit('logo-screen');
-  socket.on("username", function(data){
-    console.log('Username: ' + data)
-  })
+  socket.on('username', function(data) {
+    console.log('Username: ' + data);
+  });
 
   socket.on('game-start', function() {
-    socket.emit('load-buttons', fakeObjScav)
-  })
+    socket.emit('load-buttons', fakeObjScav);
+  });
 
-  socket.on('button-press', function(data){
-    console.log('data recieved: ' + data)
-    socket.emit('load-buttons', fakeObjDare)
+  socket.on('button-press', function(data) {
+    console.log('data received: ' + data);
+    socket.emit('load-buttons', fakeObjDare);
 
-io.on('connection', function(socket){
-  console.log('A user connected')
-  socket.on('button-press', function(data){
-    console.log('data recieved: ' + data)
-
-  })
-})
-
-
-
+    io.on('connection', function(socket) {
+      console.log('A user connected');
+      socket.on('button-press', function(data) {
+        console.log('data received: ' + data);
+      });
+    });
+  });
+});
 
 // get api endpoint(s)
 
-
 // // post endpoint (add new nouns / objects to tables?)
 
-
 const connection = require('./config/connection.js');
-var app = express();
-var PORT = process.env.PORT || 8080;
+const app = express();
+const PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.listen(PORT, function() {
@@ -84,5 +75,3 @@ app.listen(PORT, function() {
     }
   );
 });
-
-
