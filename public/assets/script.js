@@ -1,9 +1,57 @@
+// var socket = io()
+// const gameDiv = document.getElementById('game')
+// let localUser = ''
+
+// function sendPress(id) {
+//     socket.emit('button-press', JSON.stringify({
+//         "id": id,
+//         "localUser": localUser
+//     }))
+// }
+
+// function setUser() {
+//     localUser = prompt('Enter your username')
+//     socket.emit('username', localUser)
+// }
+
+// setUser()
+
+// socket.on('entered_game', function(localUser) {
+//     startScreen.append.html(localUser);
+// });
+// ask username
+
+// socket.on('load-buttons', function(buttonData){
+//     gameDiv.innerHTML=''
+//     for (i = 0; i < buttonData.length; i++) {
+//         // console.log(i)
+//         const br = document.createElement('br')
+//         gameDiv.appendChild(br)
+//         const newBtn = document.createElement("button")
+//         newBtn.className = 'btn btn-primary';
+//         newBtn.setAttribute('id', i)
+//         newBtn.setAttribute('onClick', 'sendPress(this.id)')
+//         newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
+//         gameDiv.appendChild(newBtn)
+//     }
+// })
+
+// var commentText = document.createElement('textarea');
+// commentText.className = 'form-control';
+
 var socket = io()
 const gameDiv = document.getElementById('game')
 let localUser = ''
 
 function sendPress(id) {
     socket.emit('button-press', JSON.stringify({
+        "id": id,
+        "localUser": localUser
+    }))
+}
+
+function secondPress(id) {
+    socket.emit('second-press', JSON.stringify({
         "id": id,
         "localUser": localUser
     }))
@@ -47,12 +95,39 @@ socket.on('load-buttons', function(buttonData){
         // console.log(i)
         const br = document.createElement('br')
         gameDiv.appendChild(br)
-        const button = document.createElement('button') // button 
-        button.setAttribute('onClick', "setUser()")
+        // const button = document.createElement('button') // button 
+        // button.setAttribute('onClick', "setUser()")
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
         newBtn.setAttribute('onClick', 'sendPress(this.id)')
         newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
         gameDiv.appendChild(newBtn)
+    }
+})
+
+socket.on('load-buttons2', function(buttonData){
+    gameDiv.innerHTML=''
+    for (i = 0; i < buttonData.length; i++) {
+        // console.log(i)
+        const br = document.createElement('br')
+        gameDiv.appendChild(br)
+        // const button = document.createElement('button') // button 
+        // button.setAttribute('onClick', "setUser()")
+        const newBtn = document.createElement("button")
+        newBtn.setAttribute('id', i)
+        newBtn.setAttribute('onClick', 'secondPress(this.id)')
+        newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
+        gameDiv.appendChild(newBtn)
+    }
+})
+
+socket.on('load-list', function(buttonData){
+    gameDiv.innerHTML=''
+    for (i = 0; i < buttonData.length; i++) {
+        const br = document.createElement('br')
+        gameDiv.appendChild(br)
+        const para = document.createElement("p")
+        para.appendChild(document.createTextNode(buttonData[i].sentence)) 
+        gameDiv.appendChild(para)
     }
 })
