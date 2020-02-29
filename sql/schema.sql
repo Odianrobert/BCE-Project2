@@ -1,6 +1,5 @@
-CREATE TABLE `fun_game`.`sentences` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `noun` INT NOT NULL,
-  `objects` INT NOT NULL,
-  PRIMARY KEY (`id`));
-
+CREATE TABLE `sentences` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `noun` varchar(100) NOT NULL,
+  `objects` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
