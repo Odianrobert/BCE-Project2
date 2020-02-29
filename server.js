@@ -121,6 +121,23 @@ io.on('connection', function(socket){
 
 // post endpoint (add new nouns / objects to tables?)
 
+
 http.listen(PORT, function () {
   console.log(`Server running, listening on ${PORT}`)
 })
+
+// const connection = require('./config/connection.js');
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.listen(PORT, function() {
+//   console.log('App listening on PORT ' + PORT);
+//   connection.query(
+//     //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
+//     //     ['woman', 'belt'],
+//     'SELECT * FROM fun_game.sentences',
+//     function(err, res) {
+//       if (err) throw err;
+//       console.log(res[0].noun.split(';'));
+//     }
+//   );
+// });
