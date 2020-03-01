@@ -23,6 +23,8 @@ const fakeObjDare = [
   { sentence: 'Try and sell your eyebrows to an angry man' }
 ];
 
+const user = []
+
 app.use(express.static('public'));
 
 // app.get('/', function (req, res) {
@@ -31,10 +33,16 @@ app.use(express.static('public'));
 
 io.on('connection', function(socket) {
   console.log('A user connected: ' + socket.id);
+
   //get the front end to fire a function that creates the buttons
   socket.emit('logo-screen');
   socket.on('username', function(data) {
-    console.log('Username: ' + data);
+    // console.log('Username: ' + data);
+    user.push({
+      "userName": data,
+      "userId": socket.id
+    })
+    console.log(user)
   });
 
   socket.on('game-start', function() {
@@ -62,7 +70,7 @@ io.on('connection', function(socket) {
 const connection = require('./config/connection.js');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.listen(PORT, function() {
+http.listen(PORT, function() {
   console.log('App listening on PORT ' + PORT);
   connection.query(
     //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
