@@ -81,4 +81,4 @@ const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
 
 for (i = 0; i < Array.length; i++) {
   console.log(objects);
-};
+}
