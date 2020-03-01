@@ -22,3 +22,4 @@ git add (not dot, only the files you need pushed)
 git commit -m "whatever"
 git push
 
+New Line
