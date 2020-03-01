@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const mysql = require('mysql')
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -66,27 +67,48 @@ io.on('connection', function(socket) {
 
 // // post endpoint (add new nouns / objects to tables?)
 
+http.listen(PORT, function () {
+  console.log(`Server running, listening on ${PORT}`)
+})
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "toorTOOR11$$",
+  database: "sentences_db"
+})
+
+connection.connect(function(err) {
+  if (err) { 
+      console.log(err)
+      return
+  } else {
+      console.log('Connected to DB')
+  }
+})
+
 // THIS IS WHERE THE CONNECTION IS LISTENING TO THE DATABASE
-const connection = require('./config/connection.js');
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-http.listen(PORT, function() {
-  console.log('App listening on PORT ' + PORT);
-  connection.query(
-    //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
-    //     ['woman', 'belt'],
-    'SELECT * FROM fun_game.sentences',
-    function(err, res) {
-      if (err) throw err;
-      console.log(res[0].noun.split(';'));
-    }
-  );
-});
+// const connection = require('./config/connection.js');
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// http.listen(PORT, function() {
+//   console.log('App listening on PORT ' + PORT);
+//   connection.query(
+//     //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
+//     //     ['woman', 'belt'],
+//     'SELECT * FROM fun_game.sentences',
+//     function(err, res) {
+//       if (err) throw err;
+//       console.log(res[0].noun.split(';'));
+//     }
+//   );
+// });
 
-// FILTER ARRAY OF OBJECTS, WHICH PROPERTY MATCHES VALUE AND RETURNS ARRAY
-const nouns = ['man', 'woman', 'child', 'angry man'];
-const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
+// // FILTER ARRAY OF OBJECTS, WHICH PROPERTY MATCHES VALUE AND RETURNS ARRAY
+// const nouns = ['man', 'woman', 'child', 'angry man'];
+// const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
 
-for (i = 0; i < Array.length; i++) {
-  console.log(objects);
-}
+// for (i = 0; i < Array.length; i++) {
+//   console.log(objects);
+// }
