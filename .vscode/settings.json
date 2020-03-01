@@ -2,5 +2,10 @@
     "cSpell.words": [
         "nodemon"
     ],
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "cSpell.ignoreWords": [
+        "fake",
+        "obj",
+        "scav"
+    ]
 }

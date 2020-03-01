@@ -17,12 +17,12 @@
 // })
 
 const fakeObjScav = [
-  {"sentence": "The stupud red hat example we (I) keep using"},
+  {"sentence": "The stupid red hat example we (I) keep using"},
   {"sentence": "A confused man"},
   {"sentence": "A man hitting on an un-interested woman"},
   {"sentence": "Someone spilled a drink"},
   {"sentence": "Confused guy"},
-  {"sentence": "Someone on a date, but they're texing"}
+  {"sentence": "Someone on a date, but they're texting"}
 ]
 
 const fakeObjDare = [
