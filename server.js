@@ -58,6 +58,7 @@ io.on('connection', function(socket) {
 
 // // post endpoint (add new nouns / objects to tables?)
 
+// THIS IS WHERE THE CONNECTION IS LISTENING TO THE DATABASE
 const connection = require('./config/connection.js');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -73,3 +74,11 @@ app.listen(PORT, function() {
     }
   );
 });
+
+// FILTER ARRAY OF OBJECTS, WHICH PROPERTY MATCHES VALUE AND RETURNS ARRAY
+const nouns = ['man', 'woman', 'child', 'angry man'];
+const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
+
+for (i = 0; i < Array.length; i++) {
+  console.log(objects);
+};

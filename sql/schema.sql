@@ -4,3 +4,4 @@ CREATE TABLE `fun_game`.`sentences` (
   `objects` varchar(100) NULL,
   PRIMARY KEY (`id`));
 
+INSERT INTO `fun_game`.`sentences` (`noun`, `objects`) VALUES ('man; woman; child; angry man;', 'shoes; thumbs; drink; eyebrows;');
