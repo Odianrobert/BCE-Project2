@@ -4,7 +4,7 @@
 //   host: 'localhost',
 //   port: 3306,
 //   user: 'root',
-//   password: '', // need to use enviornment variables to store password 
+//   password: '', // need to use environment variables to store password 
 //   database: ''
 // })
 
