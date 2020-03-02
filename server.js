@@ -9,16 +9,18 @@ const PORT = process.env.PORT || 3001;
 
 
 const objScav = [orm.scav()]
+Promise.all(objScav).then(values => {console.log(values)})
 
 const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
+Promise.all(objDare).then(values => {console.log(values)})
 
 const user = []
 
 app.use(express.static('public'));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, './public/index.html'))
-// })
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, './public/index.html'))
+})
 
 io.on('connection', function(socket) {
   console.log('A user connected: ' + socket.id);
@@ -51,65 +53,8 @@ io.on('connection', function(socket) {
   });
 });
 
-// get api endpoint(s)
-
-// // post endpoint (add new nouns / objects to tables?)
+// post endpoint (add new nouns / objects to tables?)
 
 http.listen(PORT, function () {
   console.log(`Server running, listening on ${PORT}`)
 })
-
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   port: 3306,
-//   user: "root",
-//   password: "toorTOOR11$$",
-//   database: "sentences_db"
-// })
-
-// connection.connect(function(err) {
-//   if (err) { 
-//       console.log(err)
-//       return
-//   } else {
-//       console.log('Connected to DB')
-//   }
-// })
-
-// THIS IS WHERE THE CONNECTION IS LISTENING TO THE DATABASE
-// const connection = require('./config/connection.js');
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-// http.listen(PORT, function() {
-//   console.log('App listening on PORT ' + PORT);
-//   connection.query(
-//     //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
-//     //     ['woman', 'belt'],
-//     'SELECT * FROM fun_game.sentences',
-//     function(err, res) {
-//       if (err) throw err;
-//       console.log(res[0].noun.split(';'));
-//     }
-//   );
-// });
-
-// // FILTER ARRAY OF OBJECTS, WHICH PROPERTY MATCHES VALUE AND RETURNS ARRAY
-// const nouns = ['man', 'woman', 'child', 'angry man'];
-// const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
-
-// for (i = 0; i < Array.length; i++) {
-//   console.log(objects);
-// }
-
-// let testArray = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
-
-Promise.all(objDare).then(values => {console.log(values)})
-Promise.all(objScav).then(values => {console.log(values)})
-
-// function log() {
-//     console.log(testArray)
-//     console.log(objScav)
-// }
-// setTimeout(log, 1000)
-
-// console.log(orm.returnOne)
