@@ -87,3 +87,4 @@ function returnOne() {
 
 module.exports.returnOne = returnOne
 module.exports.scav = scav
+module.exports.connection = connection 
