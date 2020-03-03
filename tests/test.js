@@ -17,3 +17,4 @@ test('Retrieves a random scavenger hunt question', () => {
 afterAll(() => {
     orm.connection.end()
 })
+

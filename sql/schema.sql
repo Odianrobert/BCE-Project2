@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS fun_game;
 CREATE DATABASE fun_game;
 USE fun_game;
-​
+
 CREATE TABLE sentences (
     id INT AUTO_INCREMENT, 
     sentence VARCHAR(100),
@@ -9,25 +9,25 @@ CREATE TABLE sentences (
     requires_object INT,
     PRIMARY KEY(id)
 );
-​
+
 CREATE TABLE objects (
     id INT AUTO_INCREMENT, 
     sentence_object VARCHAR(50),
     PRIMARY KEY(id)
 );
-​
+
 CREATE TABLE nouns (
     id INT AUTO_INCREMENT, 
     sentence_noun VARCHAR(100),
     PRIMARY KEY(id)
 );
-​
+
 CREATE TABLE scavenger (
     id INT AUTO_INCREMENT, 
     scavenger_sentence VARCHAR(100),
     PRIMARY KEY(id)
 );
-​
+
 INSERT INTO sentences(sentence, requires_noun, requires_object)
 VALUES ("Compliment $n on their $o", 1, 1), ("Try and sell your $o to $n", 1, 1),
         ("Ask $n about your $o", 1, 1), ("Offer your $o to $n", 1, 1),
@@ -37,7 +37,7 @@ VALUES ("Compliment $n on their $o", 1, 1), ("Try and sell your $o to $n", 1, 1)
         ("Ask to buy a(n) $o from $n", 1,1),
         ("Yell I need a(n) $o at  $n", 1,1),
         ("Whisper check out my $o in the ear of $n", 1,1);
-​
+
 INSERT INTO objects(sentence_object)
 VALUES ("eyebrows"), ("mixtape"), ("shoes"), ("thumbs"), ("baby oil"),
         ("bag of money"), ("bar stool"),("bath bomb"),("bed"),("beer"),
@@ -64,7 +64,7 @@ VALUES ("eyebrows"), ("mixtape"), ("shoes"), ("thumbs"), ("baby oil"),
         ("toe ring"),("toilet paper tube"),("toilet paper"),("towel "),
         ("unicorn"),("universal remote"),("used tissue"),("vape"),
         ("walkman"),("washing machine"),("whipped cream"),("zipper");
-​
+
 INSERT INTO nouns(sentence_noun)
 VALUES ("an angry man"), ("a pretty woman"), ("the bartender"), ("a sloppy drunk"), ("a meathead"), ("abnormally tan girl"), 
         ("a silver fox"), ("a cougar"), ("an elderly person"), ("a guy with a huge beard"), 
@@ -76,7 +76,9 @@ VALUES ("an angry man"), ("a pretty woman"), ("the bartender"), ("a sloppy drunk
         ("a person in a jean jacket"), ("a person wearing a baseball hat"), 
         ("a person with a sports team on their shirt"), ("a man with exposed chest hair"), 
         ("a girl with braids"), ("a person in mid-bite of food");
-​
+
 INSERT INTO scavenger(scavenger_sentence)
 VALUES ("Someone on a date, but they're texting"), ("Someone whos very confused"), ("Someone spilled a drink"), ("A man hitting on an un-interested woman"), 
         ("Someone vaping inside"), ("Someone doing something thats illegal"), ("Something upside-down");
+
+
