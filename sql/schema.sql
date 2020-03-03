@@ -30,12 +30,23 @@ CREATE TABLE nouns (
     PRIMARY KEY(id)
 );
 
+CREATE TABLE scavenger (
+    id INT AUTO_INCREMENT, 
+    scavenger_sentence VARCHAR(100),
+    PRIMARY KEY(id)
+);
+
 INSERT INTO sentences(sentence, requires_noun, requires_object)
 VALUES ("Compliment $n on their $o", 1, 1), ("Try and sell your $o to $n", 1, 1),
-        ("Ask $n about your $o", 1, 1), ("Offer your $o to $n", 1, 1);
+        ("Ask $n about your $o", 1, 1), ("Offer your $o to $n", 1, 1),
+        ("Get $n to sign your $o", 1, 1);
 
 INSERT INTO objects(sentence_object)
 VALUES ("eyebrows"), ("mixtape"), ("shoes"), ("thumbs");
 
 INSERT INTO nouns(sentence_noun)
 VALUES ("an angry man"), ("a woman"), ("the bartender");
+
+INSERT INTO scavenger(scavenger_sentence)
+VALUES ("Someone on a date, but they're texting"), ("Someone whos very confused"), ("Someone spilled a drink"), ("A man hitting on an un-interested woman"), 
+        ("Someone vaping inside"), ("Someone doing something thats illegal"), ("Something upside-down");

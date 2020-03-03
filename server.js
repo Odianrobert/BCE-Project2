@@ -4,33 +4,41 @@ const mysql = require('mysql')
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-const PORT = process.env.PORT || 3000;
+const orm = require('./orm/orm.js')
+const PORT = process.env.PORT || 3001;
 
-const fakeObjScav = [
-  { sentence: 'The stupid red hat example we (I) keep using' },
-  { sentence: 'A confused man' },
-  { sentence: 'A man hitting on an un-interested woman' },
-  { sentence: 'Someone spilled a drink' },
-  { sentence: 'Confused guy' },
-  { sentence: "Someone on a date, but they're texting" }
-];
 
-const fakeObjDare = [
-  { sentence: 'Try and sell your shoes to the bartender' },
-  { sentence: 'Ask an angry man about your thumbs' },
-  { sentence: 'Offer your shoes to the bartender' },
-  { sentence: 'Get someone to buy you a drink' },
-  { sentence: 'Ask a woman about your eyebrows' },
-  { sentence: 'Try and sell your eyebrows to an angry man' }
-];
+const objScav = [orm.scav()]
+Promise.all(objScav).then(values => {console.log(values)})
+
+const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
+Promise.all(objDare).then(values => {console.log(values)})
 
 const user = []
 
+const fakeObjScav = [
+  {"sentence": "The stupud red hat example we (I) keep using"},
+  {"sentence": "A confused man"},
+  {"sentence": "A man hitting on an un-interested woman"},
+  {"sentence": "Someone spilled a drink"},
+  {"sentence": "Confused guy"},
+  {"sentence": "Someone on a date, but they're texing"}
+]
+
+const fakeObjDare = [
+  {"sentence": "Try and sell your shoes to the bartender"},
+  {"sentence": "Ask an angry man about your thumbs"},
+  {"sentence": "Offer your shoes to the bartender"},
+  {"sentence": "Get someone to buy you a drink"},
+  {"sentence": "Ask a woman about your eyebrows"},
+  {"sentence": "Try and sell your eyebrows to an angry man"}
+]
+
 app.use(express.static('public'));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, './public/index.html'))
-// })
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, './public/index.html'))
+})
 
 io.on('connection', function(socket) {
   console.log('A user connected: ' + socket.id);
@@ -40,8 +48,8 @@ io.on('connection', function(socket) {
   socket.on('username', function(data) {
     // console.log('Username: ' + data);
     user.push({
-      "userName": data,
-      "userId": socket.id
+      "userName": data, // need to make sure none uses the same name upon login. the same search of var user can identify a user as being the same player if they get booted and have to log in again 
+      "userId": socket.id // upon login .find() to search for existing username. prompt player "is this you" yes/no if yes, overwrite socket.id, if no alert "username in use please pick different name"
     })
     console.log(user)
   });
@@ -52,63 +60,18 @@ io.on('connection', function(socket) {
 
   socket.on('button-press', function(data) {
     console.log('data received: ' + data);
-    socket.emit('load-buttons', fakeObjDare);
+    socket.emit('load-buttons2', fakeObjScav);
 
-    io.on('connection', function(socket) {
-      console.log('A user connected');
       socket.on('button-press', function(data) {
         console.log('data received: ' + data);
-      });
+        io.broadcast.emit('load-buttons2', fakeObjDare)
+
     });
   });
 });
 
-// get api endpoint(s)
-
-// // post endpoint (add new nouns / objects to tables?)
+// post endpoint (add new nouns / objects to tables?)
 
 http.listen(PORT, function () {
   console.log(`Server running, listening on ${PORT}`)
 })
-
-const connection = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "toorTOOR11$$",
-  database: "sentences_db"
-})
-
-connection.connect(function(err) {
-  if (err) { 
-      console.log(err)
-      return
-  } else {
-      console.log('Connected to DB')
-  }
-})
-
-// THIS IS WHERE THE CONNECTION IS LISTENING TO THE DATABASE
-// const connection = require('./config/connection.js');
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-// http.listen(PORT, function() {
-//   console.log('App listening on PORT ' + PORT);
-//   connection.query(
-//     //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
-//     //     ['woman', 'belt'],
-//     'SELECT * FROM fun_game.sentences',
-//     function(err, res) {
-//       if (err) throw err;
-//       console.log(res[0].noun.split(';'));
-//     }
-//   );
-// });
-
-// // FILTER ARRAY OF OBJECTS, WHICH PROPERTY MATCHES VALUE AND RETURNS ARRAY
-// const nouns = ['man', 'woman', 'child', 'angry man'];
-// const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
-
-// for (i = 0; i < Array.length; i++) {
-//   console.log(objects);
-// }
