@@ -1,20 +1,4 @@
-const mysql = require('mysql')
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'toorTOOR11$$', // need to use enviornment variables to store password 
-  database: 'fun_game'
-})
-
-connection.connect(function (err) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log('Connected to DB')
-  }
-})
+const connection = require('../config/connection.js')
 
 function scav() { 
     return new Promise (function (resolve, reject) {
@@ -77,13 +61,6 @@ function returnOne() {
         })
     })
 }
-
-// let testArray = [returnOne(), returnOne(), returnOne(), returnOne(), returnOne(), returnOne()]
-
-// function log() {
-//     console.log(testArray)
-// }
-// setTimeout(log, 1000)
 
 module.exports.returnOne = returnOne
 module.exports.scav = scav

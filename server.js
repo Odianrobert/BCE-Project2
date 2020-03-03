@@ -5,14 +5,13 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const orm = require('./orm/orm.js')
-const PORT = process.env.PORT || 3001;
-
+const PORT = process.env.PORT || 3000;
 
 const objScav = [orm.scav()]
-Promise.all(objScav).then(values => {console.log(values)})
+// Promise.all(objScav).then(values => {console.log(values)})
 
 const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
-Promise.all(objDare).then(values => {console.log(values)})
+// Promise.all(objDare).then(values => {console.log(values)})
 
 const user = []
 
@@ -41,6 +40,7 @@ app.get('/', function (req, res) {
 })
 
 io.on('connection', function(socket) {
+  let firstPlace
   console.log('A user connected: ' + socket.id);
 
   //get the front end to fire a function that creates the buttons
@@ -59,13 +59,17 @@ io.on('connection', function(socket) {
   });
 
   socket.on('button-press', function(data) {
-    console.log('data received: ' + data);
-    socket.emit('load-buttons2', fakeObjScav);
+    const parsed = JSON.parse(data)
+    firstPlace = user.find(user => user.userName == parsed.localUser)
+    console.log('first place = ', firstPlace.userId)
+    //add logging - first place -> value somewhere
+    socket.broadcast.emit('load-buttons2', fakeObjScav);
 
-      socket.on('button-press', function(data) {
-        console.log('data received: ' + data);
-        io.broadcast.emit('load-buttons2', fakeObjDare)
-
+      socket.on('second-press', function(data) {
+        console.log('Second Place: ' + data)
+        // add logging - second place -> value
+        // socket.emit('load-buttons', fakeObjDare)
+        socket.broadcast.emit('load-list', fakeObjDare)
     });
   });
 });

@@ -39,7 +39,8 @@ window.addEventListener ("resize", function() {
 function sendPress(id) {
     socket.emit('button-press', JSON.stringify({
         "id": id,
-        "localUser": localUser
+        "localUser": localUser, 
+        "socketId": socket.id
     }))
 }
 
