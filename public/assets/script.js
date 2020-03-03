@@ -2,6 +2,31 @@
 var socket = io()
 const gameDiv = document.getElementById('game')
 let localUser = ''
+//---------------------------window size-----------------------
+let width, height
+function size() {
+    if (height > width) { 
+        //load vertical background
+    } else if (width > height) {
+        //load horizontal background
+    } else {
+        //load backup jpg
+    }
+console.log(`width = ${width} and height = ${height}`)
+}
+
+window.addEventListener ("load", function() {
+    width = window.innerWidth
+    height = window.innerHeight
+    size()
+})
+
+window.addEventListener ("resize", function() {
+    width = window.innerWidth
+    height = window.innerHeight
+    size()
+})
+//----------------------end window size----------------------
 
 function sendPress(id) {
     socket.emit('button-press', JSON.stringify({
