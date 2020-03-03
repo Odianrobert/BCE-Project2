@@ -4,27 +4,35 @@ const gameDiv = document.getElementById('game')
 let localUser = ''
 //---------------------------window size-----------------------
 let width, height
-function size() {
-    if (height > width) { 
-        //load vertical background
-    } else if (width > height) {
-        //load horizontal background
+function background(color) {
+    // if (pass === null) {color = pass} 
+    if ( height > width && color == "blue" ) { 
+        document.body.style.backgroundImage = "url(/assets/blue-vert.gif)"
+        // document.getElementsByTagName('button').style.borderColor = "#00BAFF" // im having trouble setting the button border colors dynamically 
+    } else if (width > height && color == "blue") {
+        document.body.style.backgroundImage = "url(/assets/blue-hori.gif)"
+        // document.getElementsByTagName('button').style.borderColor = "#00BAFF"
+    } else if (height > width && color == "red") {
+        document.body.style.backgroundImage = "url(/assets/red-vert.gif)"
+        // document.getElementsByTagName('button').style.borderColor = "#ff4500"
+    } else if (width > height && color == "red") {
+        document.body.style.backgroundImage = "url(/assets/red-hori.gif)"
+        // document.getElementsByTagName('button').style.borderColor = "#ff4500"
     } else {
-        //load backup jpg
+        document.body.style.backgroundImage = "url(/assets/blue-static.jpg)"
+        // document.getElementsByTagName('button').style.borderColor = "#00BAFF"
     }
-console.log(`width = ${width} and height = ${height}`)
+// console.log(`width = ${width} and height = ${height}`)
 }
 
 window.addEventListener ("load", function() {
     width = window.innerWidth
     height = window.innerHeight
-    size()
 })
 
 window.addEventListener ("resize", function() {
     width = window.innerWidth
     height = window.innerHeight
-    size()
 })
 //----------------------end window size----------------------
 
@@ -72,16 +80,14 @@ socket.on('logo-screen', function(){
     button.appendChild(document.createTextNode("START GAME!"))
     gameDiv.appendChild(button)
 
+    background("blue")    
 })
 
 socket.on('load-buttons', function(buttonData){
     gameDiv.innerHTML=''
     for (i = 0; i < buttonData.length; i++) {
-        // console.log(i)
         const br = document.createElement('br')
         gameDiv.appendChild(br)
-        // const button = document.createElement('button') // button 
-        // button.setAttribute('onClick', "setUser()")
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
         newBtn.setAttribute('onClick', 'sendPress(this.id)')
@@ -93,17 +99,16 @@ socket.on('load-buttons', function(buttonData){
 socket.on('load-buttons2', function(buttonData){
     gameDiv.innerHTML=''
     for (i = 0; i < buttonData.length; i++) {
-        // console.log(i)
         const br = document.createElement('br')
         gameDiv.appendChild(br)
-        // const button = document.createElement('button') // button 
-        // button.setAttribute('onClick', "setUser()")
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
         newBtn.setAttribute('onClick', 'secondPress(this.id)')
         newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
         gameDiv.appendChild(newBtn)
     }
+    background("red")
+
 })
 
 socket.on('load-list', function(buttonData){
@@ -115,4 +120,6 @@ socket.on('load-list', function(buttonData){
         para.appendChild(document.createTextNode(buttonData[i].sentence)) 
         gameDiv.appendChild(para)
     }
+    background("red")
+
 })

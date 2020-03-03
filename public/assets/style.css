@@ -1,7 +1,32 @@
-/* button {
-    background-color: blue;
-} */
-
 body {
-    background-image: url("./blue-hor.gif")
+    background-image: url("./blue-static.jpg");
+    background-size: cover;
+    text-align: center; 
 }
+
+.game {
+    display: inline-block;
+}
+
+button {
+    /* border-color: #00BAFF; */
+    /* border-color: #ff4500; */
+    border-color:  grey;
+    border-radius: 7px;
+    background-color: black;
+    color: white;
+    box-shadow: 3px 3px 5px black;
+    width: 80%;
+    min-height: 50px; 
+    font-size: 2em;
+    margin: 20px;
+    padding: 5px;
+}
+
+/* media queries for cell phones 
+    buttons ~~ 95% or so width
+    set sizes so all buttons should always be visible on all phones */
+
+/* desktop media query
+    buttons ~~ 50% width 
+    all buttons visible */

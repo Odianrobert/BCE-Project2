@@ -16,6 +16,24 @@ Promise.all(objDare).then(values => {console.log(values)})
 
 const user = []
 
+const fakeObjScav = [
+  {"sentence": "The stupud red hat example we (I) keep using"},
+  {"sentence": "A confused man"},
+  {"sentence": "A man hitting on an un-interested woman"},
+  {"sentence": "Someone spilled a drink"},
+  {"sentence": "Confused guy"},
+  {"sentence": "Someone on a date, but they're texing"}
+]
+
+const fakeObjDare = [
+  {"sentence": "Try and sell your shoes to the bartender"},
+  {"sentence": "Ask an angry man about your thumbs"},
+  {"sentence": "Offer your shoes to the bartender"},
+  {"sentence": "Get someone to buy you a drink"},
+  {"sentence": "Ask a woman about your eyebrows"},
+  {"sentence": "Try and sell your eyebrows to an angry man"}
+]
+
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
@@ -42,13 +60,12 @@ io.on('connection', function(socket) {
 
   socket.on('button-press', function(data) {
     console.log('data received: ' + data);
-    socket.emit('load-buttons', fakeObjDare);
+    socket.emit('load-buttons2', fakeObjScav);
 
-    io.on('connection', function(socket) {
-      console.log('A user connected');
       socket.on('button-press', function(data) {
         console.log('data received: ' + data);
-      });
+        io.broadcast.emit('load-buttons2', fakeObjDare)
+
     });
   });
 });
