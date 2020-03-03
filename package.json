@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+
     "test": "jest",
     "start": "node server.js"
   },

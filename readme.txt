@@ -12,8 +12,6 @@ install all dependencies ( dev and production ) with npm i
 install dependenties at production time with npm i --production 
 
 -these git commands set your working branch-
-create a new folder 
-git init 
 git remote add origin git@github.com:Odianrobert/BCE-Project2.git
 git fetch origin *branchName*
 git checkout *branchName*
@@ -23,4 +21,3 @@ git add (not dot, only the files you need pushed)
 git commit -m "whatever"
 git push
 
-New Line

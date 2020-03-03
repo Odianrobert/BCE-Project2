@@ -1,22 +1,20 @@
-// const mysql = require('mysql')
+const orm = require('../orm/orm.js')
+const returnOne = orm.returnOne()
+const scav = orm.scav()
+​
+test('Retrieves a random dare', () => {
+    return returnOne.then(data => {
+        expect(data).toMatch(new RegExp('[aeiou]+'))
+    })
+})
+​
+test('Retrieves a random scavenger hunt question', () => {
+    return scav.then(data => {
+        expect(data).toEqual(expect.anything())
+    })
+})
+​
+afterAll(() => {
+    orm.connection.end()
+})
 
-const returnOne = require('../orm/orm.js')
-
-// const connection = mysql.createConnection({
-//   host: 'localhost',
-//   port: 3306,
-//   user: 'root',
-//   password: 'toorTOOR11$$', // need to use enviornment variables to store password 
-//   database: 'fun_game'
-// })
-
-// connection.connect(function (err) {
-//   if (err) {
-//     console.log(err)
-//   } else {
-//     console.log('Connected to DB')
-//   }
-// })
-
-// returnOne()
-console.log(returnOne)
