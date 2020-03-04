@@ -2,6 +2,8 @@
 var socket = io()
 const gameDiv = document.getElementById('game')
 let localUser = ''
+let logged = false
+
 //---------------------------window size-----------------------
 let width, height
 function background(color) {
@@ -53,38 +55,43 @@ function secondPress(id) {
 
 function setUser() { // updating function to work with new logo screen 
     localUser = document.getElementById('playerName').value
+    logged = true
     socket.emit('username', localUser) // emit event to set username server - side 
     socket.emit('game-start') // new event that tells the server at least one person is in the game, the server should in return fire the load-buttons event with (scavenger) data 
 }
 
 socket.on('logo-screen', function(){
 
+ 
     gameDiv.innerHTML=''
 
-    const picture = document.createElement('img') //create logo picture up top 
-    picture.setAttribute('src', './assets/70581301-infinite-game-design-template.jpg')
-    picture.setAttribute('class', 'logo')
-    gameDiv.appendChild(picture)
+        const picture = document.createElement('img') //create logo picture up top 
+        picture.setAttribute('src', './assets/70581301-infinite-game-design-template.jpg')
+        picture.setAttribute('class', 'logo')
+        gameDiv.appendChild(picture)
 
-    const br0 = document.createElement('br') // line break
-    gameDiv.appendChild(br0)
+        const br0 = document.createElement('br') // line break
+        gameDiv.appendChild(br0)
 
-    const nameBox = document.createElement('input') // input box for player name 
-    nameBox.setAttribute('id', "playerName")
-    gameDiv.appendChild(nameBox)
+        const nameBox = document.createElement('input') // input box for player name 
+        nameBox.setAttribute('id', "playerName")
+        gameDiv.appendChild(nameBox)
 
-    const br1 = document.createElement('br') // line break 
-    gameDiv.appendChild(br1)
+        const br1 = document.createElement('br') // line break 
+        gameDiv.appendChild(br1)
 
-    const button = document.createElement('button') // button 
-    button.setAttribute('onClick', "setUser()")
-    button.appendChild(document.createTextNode("START GAME!"))
-    gameDiv.appendChild(button)
+        const button = document.createElement('button') // button 
+        button.setAttribute('onClick', "setUser()")
+        button.appendChild(document.createTextNode("START GAME!"))
+        gameDiv.appendChild(button)
 
-    background("blue")    
+        background("blue")   
+    
 })
 
 socket.on('load-buttons', function(buttonData){
+    console.log(buttonData)
+  if(logged) {
     gameDiv.innerHTML=''
     for (i = 0; i < buttonData.length; i++) {
         const br = document.createElement('br')
@@ -92,12 +99,14 @@ socket.on('load-buttons', function(buttonData){
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
         newBtn.setAttribute('onClick', 'sendPress(this.id)')
-        newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
+        newBtn.appendChild(document.createTextNode(buttonData[i])) 
         gameDiv.appendChild(newBtn)
     }
+}
 })
 
 socket.on('load-buttons2', function(buttonData){
+    if(logged) {
     gameDiv.innerHTML=''
     for (i = 0; i < buttonData.length; i++) {
         const br = document.createElement('br')
@@ -105,14 +114,15 @@ socket.on('load-buttons2', function(buttonData){
         const newBtn = document.createElement("button")
         newBtn.setAttribute('id', i)
         newBtn.setAttribute('onClick', 'secondPress(this.id)')
-        newBtn.appendChild(document.createTextNode(buttonData[i].sentence)) 
+        newBtn.appendChild(document.createTextNode(buttonData[i])) 
         gameDiv.appendChild(newBtn)
     }
     background("red")
-
+    }
 })
 
 socket.on('load-list', function(buttonData){
+    if(logged) {
     gameDiv.innerHTML=''
     for (i = 0; i < buttonData.length; i++) {
         const br = document.createElement('br')
@@ -122,5 +132,5 @@ socket.on('load-list', function(buttonData){
         gameDiv.appendChild(para)
     }
     background("red")
-
+    }
 })

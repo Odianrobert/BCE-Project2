@@ -11,10 +11,16 @@ let firstPlace
 let secondPlace
 
 const objScav = [orm.scav()]
-// Promise.all(objScav).then(values => {console.log(values)})
+
+// const showObj = (a) => {
+//   a[0].forEach( b => console.log(b.scavenger_sentence))
+// }
+
+// Promise.all(objScav).then(values => {showObj(values)})
 
 const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
-// Promise.all(objDare).then(values => {console.log(values)})
+//  Promise.all(objDare).then(values => {console.log(values)})
+
 
 const user = []
 
@@ -56,8 +62,11 @@ io.on('connection', function(socket) {
     console.log(user)
   });
 
+  
   socket.on('game-start', function() {
-    socket.emit('load-buttons', fakeObjScav);
+    orm.scav().then(values => {
+      socket.emit('load-buttons',  values.map(({ scavenger_sentence }) => scavenger_sentence))
+    })
   });
 
   socket.on('button-press', function(data) {
@@ -65,7 +74,9 @@ io.on('connection', function(socket) {
      firstPlace = user.find(user => user.userName === parsed.localUser)
     console.log('first place = ', firstPlace.userId)
     //add logging - first place -> value somewhere
-    socket.broadcast.emit('load-buttons2', fakeObjScav);
+   orm.scav().then(values => {
+      socket.broadcast.emit('load-buttons2',  values.map(({ scavenger_sentence }) => scavenger_sentence))
+    })
   });
 
     socket.on('second-press', function(data) {
@@ -74,29 +85,21 @@ io.on('connection', function(socket) {
        secondPlace = user.find(user => user.userName === parsed.localUser)
       console.log('second place = ', secondPlace.userId)
       // add logging - second place -> value
-      // socket.emit('load-buttons', fakeObjDare)
-      // socket.broadcast.emit('load-list', fakeObjDare)
+      // socket.emit('load-buttons', objDare)
+      // socket.broadcast.emit('load-list', objDare)
       // update()
-      io.to(`${firstPlace.userId}`).emit('load-buttons',fakeObjDare);
-      const loosers = user.filter(user => user.userId !== firstPlace.userId)
+      orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne().then(values =>
+      io.to(`${firstPlace.userId}`).emit('load-buttons', values.map(({ dare_sentence}) => dare_sentence)))
+      const losers = user.filter(user => user.userId !== firstPlace.userId)
 
-      for (i=0; i<loosers.length; i++) {
-        io.to(`${loosers[i].userId}`).emit('load-list',fakeObjDare);
+      for (i=0; i<losers.length; i++) {
+        orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne().then(values =>
+          io.to(`${losers[i].userId}`).emit('load-list', values.map(({ dare_sentence}) => dare_sentence)))
       }
-        // console.log(loosers)
+        console.log(objDare)
 
   });
-
-  function update() {
-    if (firstPlace) {
-      io.to(`${firstPlace.userID}`).emit('load-buttons2',fakeObjDare);
-    }else {
-      socket.broadcast.emit('load- list', fakeObjDare)
-    }
-  }
-
-});
-
+})
 
 
 // post endpoint (add new nouns / objects to tables?)
