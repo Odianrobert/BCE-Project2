@@ -12,10 +12,10 @@ orm.scav().then(values => {
   objScav = values.map(({ scavenger_sentence }) => scavenger_sentence)
 })
 
-
 let objDare
 Promise.all([orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()])
   .then(values => objDare = values)
+
 
 const user = []
 
@@ -44,13 +44,19 @@ io.on('connection', function(socket) {
     socket.emit('load-buttons', objScav)
 });
 
+
   socket.on('button-press', function(data) {
     const parsed = JSON.parse(data)
     firstPlace = user.find(user => user.userName === parsed.localUser)
     console.log('first place = ', firstPlace.userId)
+
+    
+    
+
     orm.scav().then(values => {
-      socket.broadcast.emit('load-buttons2',  values.map(({ scavenger_sentence }) => scavenger_sentence))
+      socket.broadcast.emit('load-buttons2', objScav);
     })
+
   });
 
     socket.on('second-press', function(data) {
@@ -58,17 +64,20 @@ io.on('connection', function(socket) {
       const parsed = JSON.parse(data)
        secondPlace = user.find(user => user.userName === parsed.localUser)
       console.log('second place = ', secondPlace.userId)
-      
+
       io.to(`${firstPlace.userId}`).emit('load-buttons', objDare);
       const losers = user.filter(user => user.userId !== firstPlace.userId)
 
       for (i=0; i<losers.length; i++) {
         io.to(`${losers[i].userId}`).emit('load-list', objDare);
+
       }
         // console.log(objDare)
 
   });
-})
+
+
+});
 
 
 // post endpoint (add new nouns / objects to tables?)

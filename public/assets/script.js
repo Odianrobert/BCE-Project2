@@ -24,7 +24,7 @@ function background(color) {
         document.body.style.backgroundImage = "url(/assets/blue-static.jpg)"
         // document.getElementsByTagName('button').style.borderColor = "#00BAFF"
     }
-// console.log(`width = ${width} and height = ${height}`)
+console.log(`width = ${width} and height = ${height}`)
 }
 
 window.addEventListener ("load", function() {
@@ -55,7 +55,9 @@ function secondPress(id) {
 
 function setUser() { // updating function to work with new logo screen 
     localUser = document.getElementById('playerName').value
+
     logged = true
+
     socket.emit('username', localUser) // emit event to set username server - side 
     socket.emit('game-start') // new event that tells the server at least one person is in the game, the server should in return fire the load-buttons event with (scavenger) data 
 }
@@ -84,6 +86,7 @@ socket.on('logo-screen', function(){
         button.setAttribute('onClick', "setUser()")
         button.appendChild(document.createTextNode("START GAME!"))
         gameDiv.appendChild(button)
+
 
         background("blue")   
     
@@ -133,4 +136,5 @@ socket.on('load-list', function(buttonData){
     }
     background("red")
     }
+
 })

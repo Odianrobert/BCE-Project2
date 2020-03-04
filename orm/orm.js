@@ -4,9 +4,9 @@ const connection = require('../config/connection.js')
 //need to select sentence and id from db
 function scav() { 
     return new Promise (function (resolve, reject) {
-        const sql = `SELECT scavenger_sentence FROM scavenger
+        const sql = `SELECT * FROM scavenger
                     ORDER BY RAND()
-                    LIMIT 6`
+                    LIMIT 1`
         connection.query(sql, function(err,results) {
             if (err) { console.log(err) 
             } else { 
