@@ -10,11 +10,32 @@ const PORT = process.env.PORT || 3000;
 let firstPlace
 let secondPlace
 
-const objScav = [orm.scav()]
-// Promise.all(objScav).then(values => {console.log(values)})
+const objScav = [
+  {"sentence": '',
+  {"sentence": orm.scav()},
+  {"sentence": orm.scav()},
+  {"sentence": orm.scav()},
+  {"sentence": orm.scav()},
+  {"sentence": orm.scav()}
+]
+// test = Promise.all([orm.scav(),orm.scav()]).then(values => {return JSON.stringify(values)})
+test = orm.scav()
 
-const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
-// Promise.all(objDare).then(values => {console.log(values)})
+function qwer() {
+  parsed = JSON.parse(test)
+  console.log(parsed)
+}
+setTimeout(qwer, 2000)
+
+const objDare = [
+  {"sentence": orm.returnOne()},
+  {"sentence": orm.returnOne()},
+  {"sentence": orm.returnOne()},
+  {"sentence": orm.returnOne()},
+  {"sentence": orm.returnOne()},
+  {"sentence": orm.returnOne()}
+]
+Promise.all(objDare).then(values => {console.log(values)})
 
 const user = []
 
@@ -57,7 +78,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('game-start', function() {
-    socket.emit('load-buttons', fakeObjScav);
+    socket.emit('load-buttons', objScav);
   });
 
   socket.on('button-press', function(data) {
@@ -65,7 +86,7 @@ io.on('connection', function(socket) {
      firstPlace = user.find(user => user.userName === parsed.localUser)
     console.log('first place = ', firstPlace.userId)
     //add logging - first place -> value somewhere
-    socket.broadcast.emit('load-buttons2', fakeObjScav);
+    socket.broadcast.emit('load-buttons2', objScav);
   });
 
     socket.on('second-press', function(data) {
@@ -77,23 +98,15 @@ io.on('connection', function(socket) {
       // socket.emit('load-buttons', fakeObjDare)
       // socket.broadcast.emit('load-list', fakeObjDare)
       // update()
-      io.to(`${firstPlace.userId}`).emit('load-buttons',fakeObjDare);
-      const loosers = user.filter(user => user.userId !== firstPlace.userId)
+      io.to(`${firstPlace.userId}`).emit('load-buttons',objDare);
+      const losers = user.filter(user => user.userId !== firstPlace.userId)
 
-      for (i=0; i<loosers.length; i++) {
-        io.to(`${loosers[i].userId}`).emit('load-list',fakeObjDare);
+      for (i=0; i<losers.length; i++) {
+        io.to(`${losers[i].userId}`).emit('load-list',objDare);
       }
         // console.log(loosers)
 
   });
-
-  function update() {
-    if (firstPlace) {
-      io.to(`${firstPlace.userID}`).emit('load-buttons2',fakeObjDare);
-    }else {
-      socket.broadcast.emit('load- list', fakeObjDare)
-    }
-  }
 
 });
 
