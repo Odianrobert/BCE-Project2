@@ -10,15 +10,21 @@ const PORT = process.env.PORT || 3000;
 let firstPlace
 let secondPlace
 
-const objScav = [orm.scav()]
-
+// const objScav = [orm.scav()]
+let objScav
+orm.scav().then(values => {
+  objScav = values.map(({ scavenger_sentence }) => scavenger_sentence)
+})
 // const showObj = (a) => {
 //   a[0].forEach( b => console.log(b.scavenger_sentence))
 // }
 
 // Promise.all(objScav).then(values => {showObj(values)})
+let objDare
 
-const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
+Promise.all([orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()])
+  .then(values => objDare = values)
+// const objDare = [orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()]
 //  Promise.all(objDare).then(values => {console.log(values)})
 
 
@@ -64,10 +70,8 @@ io.on('connection', function(socket) {
 
   
   socket.on('game-start', function() {
-    orm.scav().then(values => {
-      socket.emit('load-buttons',  values.map(({ scavenger_sentence }) => scavenger_sentence))
-    })
-  });
+    socket.emit('load-buttons', objScav)
+});
 
   socket.on('button-press', function(data) {
     const parsed = JSON.parse(data)
@@ -88,15 +92,14 @@ io.on('connection', function(socket) {
       // socket.emit('load-buttons', objDare)
       // socket.broadcast.emit('load-list', objDare)
       // update()
-      orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne().then(values =>
-      io.to(`${firstPlace.userId}`).emit('load-buttons', values.map(({ dare_sentence}) => dare_sentence)))
+
+      io.to(`${firstPlace.userId}`).emit('load-buttons', objDare);
       const losers = user.filter(user => user.userId !== firstPlace.userId)
 
       for (i=0; i<losers.length; i++) {
-        orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne().then(values =>
-          io.to(`${losers[i].userId}`).emit('load-list', values.map(({ dare_sentence}) => dare_sentence)))
+        io.to(`${losers[i].userId}`).emit('load-list', objDare);
       }
-        console.log(objDare)
+        // console.log(objDare)
 
   });
 })

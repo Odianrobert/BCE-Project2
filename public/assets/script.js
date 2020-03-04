@@ -128,7 +128,7 @@ socket.on('load-list', function(buttonData){
         const br = document.createElement('br')
         gameDiv.appendChild(br)
         const para = document.createElement("p")
-        para.appendChild(document.createTextNode(buttonData[i].sentence)) 
+        para.appendChild(document.createTextNode(buttonData[i])) 
         gameDiv.appendChild(para)
     }
     background("red")
