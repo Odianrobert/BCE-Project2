@@ -1,5 +1,7 @@
 const connection = require('../config/connection.js')
 
+
+//need to select sentence and id from db
 function scav() { 
     return new Promise (function (resolve, reject) {
         const sql = `SELECT scavenger_sentence FROM scavenger
@@ -8,7 +10,7 @@ function scav() {
         connection.query(sql, function(err,results) {
             if (err) { console.log(err) 
             } else { 
-                resolve(results.map(results => results.scavenger_sentence))
+                resolve (results)
             }
         })
     })
