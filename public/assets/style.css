@@ -23,6 +23,18 @@ button {
     padding: 5px;
 }
 
+p{
+    border-radius: 7px;
+    background-color:rgba(0,0,0,0.6);
+    color: white;
+    width: 80%;
+    min-height: 50px; 
+    font-size: 2em;
+    margin: 20px;
+    padding: 5px;
+}
+
+
 /* media queries for cell phones 
     buttons ~~ 95% or so width
     set sizes so all buttons should always be visible on all phones */

@@ -7,55 +7,17 @@ const io = require('socket.io')(http);
 const orm = require('./orm/orm.js')
 const PORT = process.env.PORT || 3000;
 
-let firstPlace
-let secondPlace
+let objScav
+orm.scav().then(values => {
+  objScav = values.map(({ scavenger_sentence }) => scavenger_sentence)
+})
 
-const objScav = [
-  {"sentence": '',
-  {"sentence": orm.scav()},
-  {"sentence": orm.scav()},
-  {"sentence": orm.scav()},
-  {"sentence": orm.scav()},
-  {"sentence": orm.scav()}
-]
-// test = Promise.all([orm.scav(),orm.scav()]).then(values => {return JSON.stringify(values)})
-test = orm.scav()
+let objDare
+Promise.all([orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()])
+  .then(values => objDare = values)
 
-function qwer() {
-  parsed = JSON.parse(test)
-  console.log(parsed)
-}
-setTimeout(qwer, 2000)
-
-const objDare = [
-  {"sentence": orm.returnOne()},
-  {"sentence": orm.returnOne()},
-  {"sentence": orm.returnOne()},
-  {"sentence": orm.returnOne()},
-  {"sentence": orm.returnOne()},
-  {"sentence": orm.returnOne()}
-]
-Promise.all(objDare).then(values => {console.log(values)})
 
 const user = []
-
-const fakeObjScav = [
-  {"sentence": "The stupud red hat example we (I) keep using"},
-  {"sentence": "A confused man"},
-  {"sentence": "A man hitting on an un-interested woman"},
-  {"sentence": "Someone spilled a drink"},
-  {"sentence": "Confused guy"},
-  {"sentence": "Someone on a date, but they're texing"}
-]
-
-const fakeObjDare = [
-  {"sentence": "Try and sell your shoes to the bartender"},
-  {"sentence": "Ask an angry man about your thumbs"},
-  {"sentence": "Offer your shoes to the bartender"},
-  {"sentence": "Get someone to buy you a drink"},
-  {"sentence": "Ask a woman about your eyebrows"},
-  {"sentence": "Try and sell your eyebrows to an angry man"}
-]
 
 app.use(express.static('public'));
 
@@ -65,8 +27,8 @@ app.get('/', function (req, res) {
 
 io.on('connection', function(socket) {
   console.log('A user connected: ' + socket.id);
-
-  //get the front end to fire a function that creates the buttons
+  let firstPlace
+  let secondPlace
   socket.emit('logo-screen');
   socket.on('username', function(data) {
     // console.log('Username: ' + data);
@@ -77,16 +39,24 @@ io.on('connection', function(socket) {
     console.log(user)
   });
 
+  
   socket.on('game-start', function() {
-    socket.emit('load-buttons', objScav);
-  });
+    socket.emit('load-buttons', objScav)
+});
+
 
   socket.on('button-press', function(data) {
     const parsed = JSON.parse(data)
-     firstPlace = user.find(user => user.userName === parsed.localUser)
+    firstPlace = user.find(user => user.userName === parsed.localUser)
     console.log('first place = ', firstPlace.userId)
-    //add logging - first place -> value somewhere
-    socket.broadcast.emit('load-buttons2', objScav);
+
+    
+    
+
+    orm.scav().then(values => {
+      socket.broadcast.emit('load-buttons2', objScav);
+    })
+
   });
 
     socket.on('second-press', function(data) {
@@ -94,22 +64,20 @@ io.on('connection', function(socket) {
       const parsed = JSON.parse(data)
        secondPlace = user.find(user => user.userName === parsed.localUser)
       console.log('second place = ', secondPlace.userId)
-      // add logging - second place -> value
-      // socket.emit('load-buttons', fakeObjDare)
-      // socket.broadcast.emit('load-list', fakeObjDare)
-      // update()
-      io.to(`${firstPlace.userId}`).emit('load-buttons',objDare);
+
+      io.to(`${firstPlace.userId}`).emit('load-buttons', objDare);
       const losers = user.filter(user => user.userId !== firstPlace.userId)
 
       for (i=0; i<losers.length; i++) {
-        io.to(`${losers[i].userId}`).emit('load-list',objDare);
+        io.to(`${losers[i].userId}`).emit('load-list', objDare);
+
       }
-        // console.log(loosers)
+        // console.log(objDare)
 
   });
 
-});
 
+});
 
 
 // post endpoint (add new nouns / objects to tables?)
