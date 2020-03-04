@@ -7,6 +7,9 @@ const io = require('socket.io')(http);
 const orm = require('./orm/orm.js')
 const PORT = process.env.PORT || 3000;
 
+let firstPlace
+let secondPlace
+
 const objScav = [orm.scav()]
 // Promise.all(objScav).then(values => {console.log(values)})
 
@@ -40,7 +43,6 @@ app.get('/', function (req, res) {
 })
 
 io.on('connection', function(socket) {
-  let firstPlace, secondPlace
   console.log('A user connected: ' + socket.id);
 
   //get the front end to fire a function that creates the buttons
@@ -60,21 +62,42 @@ io.on('connection', function(socket) {
 
   socket.on('button-press', function(data) {
     const parsed = JSON.parse(data)
-    firstPlace = user.find(user => user.userName === parsed.localUser)
+     firstPlace = user.find(user => user.userName === parsed.localUser)
     console.log('first place = ', firstPlace.userId)
     //add logging - first place -> value somewhere
     socket.broadcast.emit('load-buttons2', fakeObjScav);
   });
+
     socket.on('second-press', function(data) {
       // console.log('Second Place: ' + data)
       const parsed = JSON.parse(data)
-      secondPlace = user.find(user => user.userName === parsed.localUser)
+       secondPlace = user.find(user => user.userName === parsed.localUser)
       console.log('second place = ', secondPlace.userId)
       // add logging - second place -> value
       // socket.emit('load-buttons', fakeObjDare)
-      socket.broadcast.emit('load-list', fakeObjDare)
+      // socket.broadcast.emit('load-list', fakeObjDare)
+      // update()
+      io.to(`${firstPlace.userId}`).emit('load-buttons',fakeObjDare);
+      const loosers = user.filter(user => user.userId !== firstPlace.userId)
+
+      for (i=0; i<loosers.length; i++) {
+        io.to(`${loosers[i].userId}`).emit('load-list',fakeObjDare);
+      }
+        // console.log(loosers)
+
   });
+
+  function update() {
+    if (firstPlace) {
+      io.to(`${firstPlace.userID}`).emit('load-buttons2',fakeObjDare);
+    }else {
+      socket.broadcast.emit('load- list', fakeObjDare)
+    }
+  }
+
 });
+
+
 
 // post endpoint (add new nouns / objects to tables?)
 
