@@ -41,8 +41,7 @@ window.addEventListener ("resize", function() {
 function sendPress(id) {
     socket.emit('button-press', JSON.stringify({
         "id": id,
-        "localUser": localUser, 
-        "socketId": socket.id
+        "localUser": localUser
     }))
 }
 
@@ -134,3 +133,24 @@ socket.on('load-list', function(buttonData){
     background("red")
     }
 })
+
+function thirdPress() {
+socket.emit('game-start') 
+}
+
+socket.on('load-buttons3', function(buttonData){
+    if(logged) {
+    gameDiv.innerHTML=''
+    for (i = 0; i < buttonData.length; i++) {
+        const br = document.createElement('br')
+        gameDiv.appendChild(br)
+        const newBtn = document.createElement("button")
+        newBtn.setAttribute('id', i)
+        newBtn.setAttribute('onClick', 'thirdPress(this.id)')
+        newBtn.appendChild(document.createTextNode(buttonData[i])) 
+        gameDiv.appendChild(newBtn)
+    }
+    background("blue")
+    }
+})
+
