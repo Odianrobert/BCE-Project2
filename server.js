@@ -34,7 +34,6 @@ io.on('connection', function(socket) {
       "userName": data, // need to make sure none uses the same name upon login. the same search of var user can identify a user as being the same player if they get booted and have to log in again 
       "userId": socket.id // upon login .find() to search for existing username. prompt player "is this you" yes/no if yes, overwrite socket.id, if no alert "username in use please pick different name"
     })
-    console.log(user)
   });
 
   socket.on('game-start', function() {
@@ -43,7 +42,7 @@ io.on('connection', function(socket) {
     io.emit('load-buttons', [objScav, 'button', 'sendPress', 'blue'])
     Promise.all([orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()])
       .then(values => objDare = values)
-  });
+  })
 
   socket.on('button-press', function(data) {
     const parsed = JSON.parse(data)
@@ -59,7 +58,6 @@ io.on('connection', function(socket) {
     const parsed = JSON.parse(data)
     secondPlace = user.find(user => user.userName === parsed.localUser)
     console.log('second place = ', secondPlace.userId)
-
     io.to(`${firstPlace.userId}`).emit('load-buttons', [objDare, 'button', 'thirdPress', 'red']);
     io.to(`${secondPlace.userId}`).emit('load-buttons', [objDare, 'p', 'thirdPress', 'blue']) 
     let losers = user.filter(user => user.userId !== firstPlace.userId)

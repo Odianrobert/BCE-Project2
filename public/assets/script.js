@@ -63,7 +63,7 @@ function listUsers(){
 function sendPress(id) {
     socket.emit('button-press', JSON.stringify({
         "id": id,
-        "localUser": localUser, 
+        "localUser": localUser
     }))
 }
 
@@ -149,4 +149,4 @@ socket.on('load-buttons', function([buttonData, bl, fn, color]) { //data, button
         }
     }
     background(color)
-}) 
+})
