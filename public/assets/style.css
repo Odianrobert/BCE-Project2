@@ -13,7 +13,7 @@ button {
     /* border-color: #ff4500; */
     border-color:  grey;
     border-radius: 7px;
-    background-color: black;
+    background-color:rgba(0,0,0,0.6);
     color: white;
     box-shadow: 3px 3px 5px black;
     width: 80%;
@@ -33,7 +33,6 @@ p{
     margin: 20px;
     padding: 5px;
 }
-
 
 /* media queries for cell phones 
     buttons ~~ 95% or so width
