@@ -1,7 +1,24 @@
 const connection = require('../config/connection.js')
 
+function add(param1, param2) {
+    let sql 
+    if (param1 === 'nouns') {
+        sql = `INSERT INTO nouns(sentence_noun) VALUES('${param2}')`
+    } else if (param1 === 'objects') {
+        sql = `INSERT INTO objects(sentence_object) VALUES('${param2}')`
+    } else if (param1 === 'sentences') {
+        sql= `INSERT INTO scavenger(scavenger_sentence) VALUES('${param2}')`
+    } else {
+        console.log('Table not found')
+    }
+    connection.query(sql, function (err, results) {
+        if (err) {console.log(err)
+        } else {
+            console.log(`Added "${param2}" to ${param1} table. Affected rows: ${results.affectedRows}`)
+        }
+    })
+}
 
-//need to select sentence and id from db
 function scav() { 
     return new Promise (function (resolve, reject) {
         const sql = `SELECT scavenger_sentence FROM scavenger
@@ -29,7 +46,6 @@ function returnOne() {
         connection.query(sql, function(err, results) {
             if (err) { console.log(err) 
             } else {
-                // resolve(results)
                 data.sentence = results[0].sentence
                 if ( results[0].requires_noun !== 0 ) {
                     const sql_noun = `SELECT * FROM nouns
@@ -38,7 +54,6 @@ function returnOne() {
                     connection.query(sql_noun, function(err, nouns) {
                         if (err) {console.log(err)
                         } else {
-                            // console.log(nouns)
                             data.nouns[0] = nouns[0].sentence_noun
                         }
                     })
@@ -49,9 +64,7 @@ function returnOne() {
                     connection.query(sql_object, function(err, obj) {
                         if (err) {console.log(err) 
                         } else {
-                            // console.log(obj)
                             data.objects[0] = obj[0].sentence_object
-
                             const final1 = data.sentence.replace("$n", data.nouns[0])
                             const final2 = final1.replace("$o", data.objects[0])
                             resolve(final2)
@@ -59,11 +72,11 @@ function returnOne() {
                     })
                 } 
             }
-
         })
     })
 }
 
+module.exports.add = add
 module.exports.returnOne = returnOne
 module.exports.scav = scav
 module.exports.connection = connection 

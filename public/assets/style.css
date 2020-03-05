@@ -9,11 +9,9 @@ body {
 }
 
 button {
-    /* border-color: #00BAFF; */
-    /* border-color: #ff4500; */
     border-color:  grey;
     border-radius: 7px;
-    background-color: black;
+    background-color:rgba(0,0,0,0.6);
     color: white;
     box-shadow: 3px 3px 5px black;
     width: 80%;
@@ -23,7 +21,7 @@ button {
     padding: 5px;
 }
 
-p{
+p {
     border-radius: 7px;
     background-color:rgba(0,0,0,0.6);
     color: white;
@@ -34,11 +32,32 @@ p{
     padding: 5px;
 }
 
+img { 
+    width: 85%;
+}
 
-/* media queries for cell phones 
-    buttons ~~ 95% or so width
-    set sizes so all buttons should always be visible on all phones */
+h3 {
+    color: #ff4500;
+    font-size: 2em;
+    font-weight: normal;
+}
 
-/* desktop media query
+/* css file is written for phones
+
+/* desktop media query 
     buttons ~~ 50% width 
     all buttons visible */
+
+@media screen and (min-width: 1024px) {
+    img {
+        width: 40%;
+    }
+
+    p {
+        width: 40%
+    }
+
+    button {
+        width: 40%;
+    }
+}
