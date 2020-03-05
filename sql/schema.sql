@@ -79,6 +79,14 @@ VALUES ("an angry man"), ("a pretty woman"), ("the bartender"), ("a sloppy drunk
 
 INSERT INTO scavenger(scavenger_sentence)
 VALUES ("Someone on a date, but they're texting"), ("Someone whos very confused"), ("Someone spilled a drink"), ("A man hitting on an un-interested woman"), 
-        ("Someone vaping inside"), ("Someone doing something thats illegal"), ("Something upside-down");
+        ("Someone vaping inside"), ("Someone doing something thats illegal"), ("Something upside-down"),
+        ("Someone with a Bluetooth in their ear"), ("Someone with a crazy hairpiece (wig or weave)"),
+        ("Someone wearing socks and sandals"), ("Someone picking their nose"), ("Someone rocking a handlebar mustache"),
+        ("Someone in a tye-dye shirt"), ("Person reading alone"), ("An old person complaining"),
+        ("Tribal tattoo on arm"), ("Someone taking a selfie"), ("A duct taped stool"),
+        ("Dollar bills stapled to the wall"), ("The server/bartender is texting"), ("Guy in a sleeveless shirt"),
+        ("Someone with visible underwear"), ("An animal"), ("Someone wearing a sports jersey"),
+        ("A group taking shots");
+
 
 
