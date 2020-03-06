@@ -4,7 +4,7 @@ let localUser
 let userName
 let logged = false
 // let instrOn = true
-const instrBox = document.getElementById('instr')
+// const instrBox = document.getElementById('instr')
 
 let width, height
 function background(color) {
@@ -22,14 +22,16 @@ function background(color) {
 }
 
 function onLoad(user) {
-    width = window.innerWidth
-    height = window.innerHeight
     localUser = user
     logged = true
-    socket.emit('username', localUser) 
-    socket.emit('game-start')
+    socket.emit('login-again')
+    socket.emit('username', localUser)
 }
-window.addEventListener ("load", onLoad() )
+
+window.addEventListener ("load", function() {
+    width = window.innerWidth
+    height = window.innerHeight
+})
 
 window.addEventListener ("resize", function() {
     width = window.innerWidth
@@ -79,11 +81,11 @@ function thirdPress() {
 }
 
 function setUser() { 
-        localUser = document.getElementById('playerName').value
-        console.log(localUser)
-        logged = true
-        socket.emit('username', localUser) 
-        socket.emit('game-start') 
+    localUser = document.getElementById('playerName').value
+    console.log(localUser)
+    logged = true
+    socket.emit('username', localUser) 
+    socket.emit('game-start') 
 }
 
 socket.on('logo-screen', function(userName0){
@@ -114,10 +116,16 @@ socket.on('logo-screen', function(userName0){
     const button0 = document.createElement('button') // button 
     button0.setAttribute('onClick', "listUsers()")
     button0.style.borderColor = "#00BAFF"
-    button0.appendChild(document.createTextNode("Already Logged In? Click Here"))
+    button0.appendChild(document.createTextNode("Already Logged In?"))
     gameDiv.appendChild(button0)
 
     background("blue")
+})
+
+socket.on('waiting', function() {
+    // waits for the next emit before entering game, creates a bug if the player was sitting on the dare/button screen, as no player will be able to move the game forward
+    // eliminated a bug where loggin on in the middle of a game reset all players to blue scavenger
+    gameDiv.innerHTML = '<h3>Player Entering Game</h3><h3>Please Wait</h3>'
 })
 
 // socket.on('instructions', function(data) {
@@ -149,4 +157,13 @@ socket.on('load-buttons', function([buttonData, bl, fn, color]) { //data, button
         }
     }
     background(color)
-})
+}) 
+
+// socket.on('grab-data', function(id) {
+//     tempData = gameDiv.innerHTML
+//     socket.to(`${id}`).emit('send-data', tempData)
+// })
+
+// socket.on('send-data', function(tempData) {
+//     gameDiv.innerHTML = tempData
+// })
