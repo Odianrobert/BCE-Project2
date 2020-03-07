@@ -44,7 +44,7 @@ function inst() {
                         <h3>Scavenger Hunt! Spot any of these things in the crowd, and be the first to press the button</h3>
                         <h3>The first player to press the button gets to choose an upcoming dare</h3>
                         <h3>The second person to spot the item and press the button is exempt from the coming dare</h3>
-                        <h3>Choose a dare, choose a target, and make your buddys embarass themselves!</h3>
+                        <h3>Choose a dare, choose a target, and make your buddies embarass themselves!</h3>
                         <h3>Blue screens are present when the game is in waiting mode, keep looking for things in the crowd!</h3>
                         <h3>Red screens mean danger. The screen will flash red when first place has found something, but second place has not registered yet. </h3>
                         <h3>It will also flash red during the dare stage, watch out!</h3>`
@@ -118,6 +118,12 @@ socket.on('logo-screen', function(userName0){
     button0.style.borderColor = "#00BAFF"
     button0.appendChild(document.createTextNode("Already Logged In?"))
     gameDiv.appendChild(button0)
+
+    const button1 = document.createElement('button') // button 
+    button1.setAttribute('onClick', "inst()")
+    button1.style.borderColor = "#00BAFF"
+    button1.appendChild(document.createTextNode("Instructions"))
+    gameDiv.appendChild(button1)
 
     background("blue")
 })
