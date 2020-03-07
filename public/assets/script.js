@@ -146,6 +146,7 @@ socket.on('waiting', function() {
 // })
 
 socket.on('load-buttons', function([buttonData, bl, fn, color]) { //data, button or p, what function is called, color of background
+    console.log(buttonData)
     if(logged) {
         gameDiv.innerHTML=''
         for (i = 0; i < buttonData.length; i++) {
