@@ -1,84 +1,122 @@
 const path = require('path');
 const express = require('express');
+const mysql = require('mysql')
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const orm = require('./orm/orm.js')
 const PORT = process.env.PORT || 3000;
 
-const fakeObjScav = [
-  { sentence: 'The stupid red hat example we (I) keep using' },
-  { sentence: 'A confused man' },
-  { sentence: 'A man hitting on an un-interested woman' },
-  { sentence: 'Someone spilled a drink' },
-  { sentence: 'Confused guy' },
-  { sentence: "Someone on a date, but they're texting" }
-];
+let firstPlace
+let secondPlace
+let loosers
+let user = []
+let disconnected = []
 
-const fakeObjDare = [
-  { sentence: 'Try and sell your shoes to the bartender' },
-  { sentence: 'Ask an angry man about your thumbs' },
-  { sentence: 'Offer your shoes to the bartender' },
-  { sentence: 'Get someone to buy you a drink' },
-  { sentence: 'Ask a woman about your eyebrows' },
-  { sentence: 'Try and sell your eyebrows to an angry man' }
-];
+let objScav
+orm.scav().then(values => { 
+  objScav = values.map(({ scavenger_sentence }) => scavenger_sentence)
+})
+
+let objDare 
+Promise.all([orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()])
+  .then(values => objDare = values)
+
+function returnDisconnected() {
+  if (disconnected.length == 0) {
+    return null
+  } else {
+    console.log('all disconnected users - ', disconnected)
+    return disconnected.map(disconnected => disconnected.userName)
+  }
+}
+
 
 app.use(express.static('public'));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, './public/index.html'))
-// })
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, './public/index.html'))
+})
 
 io.on('connection', function(socket) {
   console.log('A user connected: ' + socket.id);
-  //get the front end to fire a function that creates the buttons
-  socket.emit('logo-screen');
+
+  socket.emit('logo-screen', returnDisconnected());
+
   socket.on('username', function(data) {
-    console.log('Username: ' + data);
+    exist = user.find(user => user.userName === data) 
+    index = user.indexOf(exist)
+    userDisconnected = returnDisconnected()
+    console.log(`Looking for specific disconnected user - ${JSON.stringify(userDisconnected)}`)
+    if (exist !== undefined) {
+      console.log(`username already exists ${exist.userName}`)
+      user[index].userId = socket.id
+      // disconnected = disconnected.filter(elem => elem !== exist)
+      disconnected = disconnected.splice(index, 1)
+      console.log('all disconnected users - ', disconnected)
+    } else {
+      user.push({
+        "userName": data,
+        "userId": socket.id 
+      })
+      console.log(`All users - ${JSON.stringify(user)}`)
+    }
   });
 
+  socket.on('login-again', function() {
+    socket.to(socket.id).emit('waiting')
+  })
+
   socket.on('game-start', function() {
-    socket.emit('load-buttons', fakeObjScav);
+    // data = 'Scavenger Hunt! Spot any of these things in the crowd, and be the first to press the button'
+    // io.to(`${socket.id}`).emit('instructions', data)
+    io.emit('load-buttons', [objScav, 'button', 'sendPress', 'blue'])
+    Promise.all([orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne(), orm.returnOne()])
+      .then(values => objDare = values)
   });
 
   socket.on('button-press', function(data) {
-    console.log('data received: ' + data);
-    socket.emit('load-buttons', fakeObjDare);
-
-    io.on('connection', function(socket) {
-      console.log('A user connected');
-      socket.on('button-press', function(data) {
-        console.log('data received: ' + data);
-      });
-    });
+    const parsed = JSON.parse(data)
+    firstPlace = user.find(user => user.userName === parsed.localUser)
+    console.log('first place = ', firstPlace.userId)
+    socket.broadcast.emit('load-buttons',  [objScav, 'button', 'secondPress', 'red'])
   });
-});
 
-// get api endpoint(s)
+  socket.on('second-press', function(data) {
+    orm.scav().then(values => { 
+      objScav = values.map(({ scavenger_sentence }) => scavenger_sentence)
+    })
+    const parsed = JSON.parse(data)
+    secondPlace = user.find(user => user.userName === parsed.localUser)
+    console.log('second place = ', secondPlace.userId)
 
-// // post endpoint (add new nouns / objects to tables?)
-
-// THIS IS WHERE THE CONNECTION IS LISTENING TO THE DATABASE
-const connection = require('./config/connection.js');
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.listen(PORT, function() {
-  console.log('App listening on PORT ' + PORT);
-  connection.query(
-    //     'INSERT INTO new_table (noun, objects) VALUES (?, ?)',
-    //     ['woman', 'belt'],
-    'SELECT * FROM fun_game.sentences',
-    function(err, res) {
-      if (err) throw err;
-      console.log(res[0].noun.split(';'));
+    io.to(`${firstPlace.userId}`).emit('load-buttons', [objDare, 'button', 'thirdPress', 'red']);
+    io.to(`${secondPlace.userId}`).emit('load-buttons', [objDare, 'p', 'thirdPress', 'blue']) 
+    let losers = user.filter(user => user.userId !== firstPlace.userId)
+    loosers = losers.filter(losers => losers.userId !== secondPlace.userId) 
+    
+    for (i=0; i<loosers.length; i++) {
+      io.to(`${loosers[i].userId}`).emit('load-buttons', [objDare, 'p', 'thirdPress', 'red']);
     }
-  );
-});
+  });
 
-// FILTER ARRAY OF OBJECTS, WHICH PROPERTY MATCHES VALUE AND RETURNS ARRAY
-const nouns = ['man', 'woman', 'child', 'angry man'];
-const objects = ['shoes', 'thumbs', 'drink', 'eyebrows'];
+  socket.on('disconnect', function(reason) {
+    if (reason === 'io server disconnect') {
+      socket.connect()
+    }
+    else if (user.find(user => user.userId === socket.id)) {
+      disconnected.push(user.find(user => user.userId === socket.id))
+      console.log(`All disconnected users ${JSON.stringify(disconnected)}`)
+    }
+  })
 
-for (i = 0; i < Array.length; i++) {
-  console.log(objects);
-}
+})
+
+app.post('/:table/:value', function(req, res) {
+  orm.add(req.params.table, req.params.value)
+  res.status(200)
+})
+
+http.listen(PORT, function () {
+  console.log(`Server running, listening on ${PORT}`)
+})
